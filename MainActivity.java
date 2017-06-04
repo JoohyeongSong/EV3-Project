@@ -1,7 +1,5 @@
 package me.jiyun.myapplication;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,18 +9,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 public class MainActivity extends AppCompatActivity {
 
     private TextView switchStatus;
     private Switch mySwitch;
     private Button Connect;
     BT_comm BTconnect = new BT_comm();
-    Button button;
+
     // Connector connector;
     public TextView text;
-
+    static boolean ConnectionFlag = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,24 +31,23 @@ public class MainActivity extends AppCompatActivity {
 
         Connect.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //text = (TextView) findViewById(R.id.text);
-                BTconnect.enableBT();
-                if (BTconnect.connectToNXTs()) {
-                    Toast toast = Toast.makeText(MainActivity.this, "Connection Successed!", Toast.LENGTH_SHORT );
-                    toast.show();
+                   text = (TextView) findViewById(R.id.text);
 
-                    byte bt = 'c';
-                    try {
-                        BTconnect.writeMessage(bt);
-                    } catch (InterruptedException e) {
-                    }
-                    //text.setText("Connected!");
-                }
-                else {
-                    Toast toast = Toast.makeText(MainActivity.this, "Connection failed!", Toast.LENGTH_SHORT );
-                    toast.show();
-                    //text.setText("Connection failed!");
-                }
+                   BTconnect.enableBT();
+                   if (BTconnect.connectToNXTs()) {
+                       Toast toast = Toast.makeText(MainActivity.this, "Connection Successed!", Toast.LENGTH_SHORT);
+                       toast.show();
+
+                       byte bt = 'c';
+                       try {
+                           BTconnect.writeMessage(bt);
+                       } catch (InterruptedException e) {
+                       }
+                       ConnectionFlag = true;
+                   } else {
+                       Toast toast = Toast.makeText(MainActivity.this, "Connection failed!", Toast.LENGTH_SHORT);
+                       toast.show();
+                   }
             }
         });
 
