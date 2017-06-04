@@ -1,13 +1,19 @@
+import java.io.IOException;
+
 import lejos.hardware.lcd.LCD;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 import lejos.utility.Delay;
+
 public class EV3_mazeSolve 
 {
 	static EV3_motor move = new EV3_motor();
 	static EV3_LightSensor light = new EV3_LightSensor();
 	static EV3_ColorSensor color = new EV3_ColorSensor();
 	static EV3_mazeSolve EV3 = new EV3_mazeSolve();
+	
+	static EV3_BluetoothConnect connect = new EV3_BluetoothConnect();
+	char command = 'a';
 	
 	// EV3_mazeSolve Constructor
 	public EV3_mazeSolve() {
@@ -16,64 +22,18 @@ public class EV3_mazeSolve
 		light.start();
 		color.start();
 		move.setSpeed(100);
-	}
+		}
 	
 	// Main function
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		Behavior b2 = new SenseAndMove();
+		connect.Connect();
 		
 		Behavior[] behaviorList = {b2};
 		Arbitrator arbitrator = new Arbitrator(behaviorList);
 		
 		LCD.drawString("Behavior Start!", 0, 2);
 		arbitrator.start();
-	}
-}
-
-// Find correct path
-class PathFind implements Behavior {
-	
-	static Integer rotate_count = 0;
-	static boolean LeftRightFlag = false;
-	public static boolean suppressed;
-	
-	@Override
-	public boolean takeControl() {
-		// Sense White
-		if (EV3_mazeSolve.light.getLight() > 0.5) {
-			return true;
-		}
-		else {
-			rotate_count = 0;
-			return false;
-		}
-	}
-
-	@Override
-	public void suppress() {
-		suppressed = true;
-	}
-	
-	@Override
-	public void action() {
-		if (rotate_count < 10) {
-			EV3_mazeSolve.move.leftTurn(20);
-			Delay.msDelay(1000);
-			LCD.clearDisplay();
-			LCD.drawString(rotate_count.toString(), 0, 5);
-			rotate_count++;
-		}
-		else {
-			for(int i = 0; i<18; i++, rotate_count++) {
-				EV3_mazeSolve.move.rightTurn(70);
-				Delay.msDelay(2000);
-				LCD.clearDisplay();
-				LCD.drawString(rotate_count.toString(), 0, 5);
-				rotate_count++;
-			}
-			if (rotate_count > 30)
-				rotate_count = 0;
-		}
 	}
 }
 
@@ -91,6 +51,8 @@ class SenseAndMove implements Behavior {
 	static boolean LeftRightFlag = false;
 	public static boolean suppressed;
 	static boolean white_flag = false;
+	static boolean direction_flag = true;
+	static Integer rotate_size = 0;
 	
 	public void Process_Red_Wall() {
 		LCD.clearDisplay();
@@ -134,6 +96,7 @@ class SenseAndMove implements Behavior {
 		int color = EV3_mazeSolve.color.getColor();
 		float light = EV3_mazeSolve.light.getLight();
 		
+		
 		// Detect wall
 		if (color >= 0 && mutex == false) {
 			mutex = true;
@@ -174,24 +137,31 @@ class SenseAndMove implements Behavior {
 	
 	@Override
 	public void action() {
+		// if Black, Go through
 		if (white_flag == false) {
 			EV3_mazeSolve.move.forward();
 			Float v = EV3_mazeSolve.light.getLight();
 			LCD.drawString(v.toString(), 0, 4);
+			rotate_size = 20;
 		}
+		// if White, Find path
 		else {
-			if (rotate_count < 7) {
-				EV3_mazeSolve.move.leftTurn(20);
-				Delay.msDelay(1000);
+			if (direction_flag) {
+				EV3_mazeSolve.move.leftTurn(rotate_size);
+				Delay.msDelay(rotate_size*20);
+				rotate_size = rotate_size + 20;
+				direction_flag = false;
 				LCD.clearDisplay();
-				LCD.drawString(rotate_count.toString(), 0, 5);
+				LCD.drawString(rotate_size.toString(), 0, 5);
 				rotate_count++;
 			}
 			else {
-				EV3_mazeSolve.move.rightTurn(60);
-				Delay.msDelay(2000);
+				EV3_mazeSolve.move.rightTurn(rotate_size);
+				Delay.msDelay(rotate_size*20);
+				rotate_size = rotate_size + 20;
+				direction_flag = true;
 				LCD.clearDisplay();
-				LCD.drawString(rotate_count.toString(), 0, 5);
+				LCD.drawString(rotate_size.toString(), 0, 5);
 				rotate_count++;
 				if (rotate_count > 20)
 					rotate_count = 0;
