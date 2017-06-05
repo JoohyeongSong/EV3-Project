@@ -22,8 +22,6 @@ public class BT_comm {
     BluetoothSocket socket_nxt1;
     boolean success = false;
 
-
-
     // Enables Bluetooth if not enabled
     public void enableBT(){
         localAdapter = BluetoothAdapter.getDefaultAdapter();
