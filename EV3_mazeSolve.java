@@ -1,5 +1,4 @@
 import java.io.IOException;
-
 import lejos.hardware.lcd.LCD;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
