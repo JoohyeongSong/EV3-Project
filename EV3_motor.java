@@ -6,7 +6,6 @@ public class EV3_motor {
 	static private RegulatedMotor leftmotor = new EV3LargeRegulatedMotor(MotorPort.A);
 	static private RegulatedMotor rightmotor = new EV3LargeRegulatedMotor(MotorPort.B);
 	
-	
 	public void forward() {
 		leftmotor.forward();
 		rightmotor.forward();
