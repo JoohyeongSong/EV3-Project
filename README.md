@@ -5,3 +5,4 @@
 3. While trying EV3 bluetooth connect, press CONNECT EV3 Button on smartphone application.
 
 4. Press START button on application.
+
