@@ -5,8 +5,7 @@ import lejos.hardware.sensor.SensorMode;
 public class EV3_ColorSensor extends Thread{
 	private EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S4);
 	private SensorMode colorMode = colorSensor.getRGBMode();
-	private float[] colorValue = new float[colorMode.sampleSize()];
-	
+	private float[] colorValue = new float[colorMode.sampleSize()];	
 	final float RED_THRES = 0.2f;
 	final float BLACK_THRES_MIN = 0.01f;
 	final float BLACK_THRES_MAX = 0.02f;
