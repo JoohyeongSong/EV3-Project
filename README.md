@@ -1,10 +1,10 @@
-1. Turn the EV3 on and smartphone application.
+1. Turn on EV3 and smartphone application.
 
-2. Run EV3_mazeSolve.java.
+2. Run EV3_mazeSolve.java on EV3.
 
-3. While trying EV3 bluetooth to connect, press CONNECT Button on smartphone application.
+3. Press CONNECT Button on application to connect with EV3.
 
-4. Press START button on application to start maze solve.
+4. Press START button on application to start Maze solver.
 
 5. Press Pause button on application, if you want to pause EV3.
 
