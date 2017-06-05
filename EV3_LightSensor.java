@@ -3,7 +3,6 @@ import lejos.hardware.sensor.NXTLightSensor;
 import lejos.hardware.sensor.SensorMode;
 
 public class EV3_LightSensor extends Thread{
-	
 	private NXTLightSensor lightSensor = new NXTLightSensor(SensorPort.S3);
 	private SensorMode lightMode = lightSensor.getRedMode();
 	private float[] lightValue = new float[lightMode.sampleSize()];
