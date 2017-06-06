@@ -38,11 +38,6 @@ public class MainActivity extends AppCompatActivity {
                        Toast toast = Toast.makeText(MainActivity.this, "Connection Successed!", Toast.LENGTH_SHORT);
                        toast.show();
 
-                       byte bt = 'c';
-                       try {
-                           BTconnect.writeMessage(bt);
-                       } catch (InterruptedException e) {
-                       }
                        ConnectionFlag = true;
                    } else {
                        Toast toast = Toast.makeText(MainActivity.this, "Connection failed!", Toast.LENGTH_SHORT);
@@ -62,10 +57,26 @@ public class MainActivity extends AppCompatActivity {
 
                 if(isChecked){
                     switchStatus.setText("EV3 is currently ON");
+
+                    if(ConnectionFlag = true) {
+                        byte bt = 1;
+                        try {
+                            BTconnect.writeMessage(bt);
+                        } catch (InterruptedException e) {
+                        }
+                    }
+
                 }else{
                     switchStatus.setText("EV3 is currently OFF");
-                }
 
+                    if(ConnectionFlag = true) {
+                        byte bt = 0;
+                        try {
+                            BTconnect.writeMessage(bt);
+                        } catch (InterruptedException e) {
+                        }
+                    }
+                }
             }
         });
 
