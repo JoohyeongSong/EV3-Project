@@ -1,4 +1,5 @@
 import java.io.IOException;
+
 import lejos.hardware.lcd.LCD;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
@@ -12,8 +13,7 @@ public class EV3_mazeSolve
 	static EV3_mazeSolve EV3 = new EV3_mazeSolve();
 	
 	static EV3_BluetoothConnect connect = new EV3_BluetoothConnect();
-	char command = 'a';
-	
+
 	// EV3_mazeSolve Constructor
 	public EV3_mazeSolve() {
 		light.setDaemon(true);
@@ -26,7 +26,9 @@ public class EV3_mazeSolve
 	// Main function
 	public static void main(String[] args) throws IOException, InterruptedException {
 		Behavior b2 = new SenseAndMove();
-		connect.Connect();
+		if(connect.Connect()) {
+			connect.start();
+		}
 		
 		Behavior[] behaviorList = {b2};
 		Arbitrator arbitrator = new Arbitrator(behaviorList);
@@ -65,6 +67,21 @@ class SenseAndMove implements Behavior {
 	public void Process_Black_Wall() {
 		LCD.clearDisplay();
 		LCD.drawString("BLACK", 0, 1);
+		
+		// Wait for data to drain
+		LCD.clear();
+		LCD.drawString("closing",0,3);
+		LCD.refresh();
+
+		try {
+			EV3_BluetoothConnect.btc.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		LCD.clear();
 		System.exit(-1);
 	}
 	
@@ -95,6 +112,10 @@ class SenseAndMove implements Behavior {
 		int color = EV3_mazeSolve.color.getColor();
 		float light = EV3_mazeSolve.light.getLight();
 		
+		if (EV3_BluetoothConnect.OnOff_Flag == false) {
+			EV3_mazeSolve.move.stop();
+			return false;
+		}
 		
 		// Detect wall
 		if (color >= 0 && mutex == false) {
