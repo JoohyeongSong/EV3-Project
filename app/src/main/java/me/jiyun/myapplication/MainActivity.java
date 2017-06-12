@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
     float OneBlock = 200;
     Integer[] buf = new Integer[1000];
     int bufferLength = 0;
+    String path_data = "{";
 
 
     @Override
@@ -73,6 +74,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 setContentView(vw);
+
                 sendPostData();
 
                 Toast.makeText(MainActivity.this, "Data POST", Toast.LENGTH_SHORT).show();
@@ -210,6 +212,10 @@ public class MainActivity extends Activity {
                 }
             }
 
+            for(int i=0; i<bufferLength; i++)
+                path_data = (path_data + buf[i] + " ");
+            path_data += "}";
+
             return null;
         }
 
@@ -267,8 +273,9 @@ public class MainActivity extends Activity {
         new Thread(){
             public void run(){
                 try{
-                    String path_data = buf.toString();
-                    String link = "http://10.1.151.67:5000/path";
+
+
+                    String link = "http://10.1.11.55:5000/path";
                     HttpClient httpclient = new DefaultHttpClient();
                     HttpPost httppost = new HttpPost(link);
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
