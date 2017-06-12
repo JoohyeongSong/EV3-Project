@@ -1,4 +1,5 @@
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 import lejos.hardware.Bluetooth;
@@ -8,6 +9,10 @@ import lejos.remote.nxt.NXTConnection;
 public class EV3_BluetoothConnect extends Thread{
 	static boolean OnOff_Flag = false;
 	static NXTConnection btc;
+	static boolean End_flag = false;
+	static DataInputStream input;
+	static DataOutputStream output;
+	
 	
 	public boolean Connect() throws IOException, InterruptedException {		
 	
@@ -25,30 +30,60 @@ public class EV3_BluetoothConnect extends Thread{
 				LCD.clear();
 				LCD.drawString("connected",0,2);
 				LCD.refresh();
+				
+				output = btc.openDataOutputStream();
+				input = btc.openDataInputStream();
+				
 				break;
 			}
 		}
 		
 		return true;
 	}
+	
+	public static void DeliverPath (int[] SendData) throws IOException {
+		
+		LCD.drawString("Path Print!", 0, 6);
+		
+		for (int i = 0; i <= SendData[0]; i++) {
+			output.writeInt(SendData[i]);
+		}
+		
+		LCD.clearDisplay();
+	}
+	
+	public static void DeliverPathByte (Byte[] SendData) throws IOException {
+		
+		LCD.drawString("Path: ", 0, 7);
+		int length = SendData[0];
+		
+		for (int i = 0; i <= length; i++) {
+			output.writeByte(SendData[i]);
+		}
+		
+		 
+		LCD.clearDisplay();
+	}
 
 	public void run() {
 		// Loop for read data  
-		DataInputStream dis = btc.openDataInputStream();
 		Byte n = 0;
 		
 		while (true) {
 			try {
-				n = dis.readByte();
+				n = input.readByte();
+				//Thread.sleep(1000);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} 
 			LCD.drawInt(n, 0, 4);
 			if (n == 1)
 				OnOff_Flag = true;
 			else
 				OnOff_Flag = false;
 		}
+	
 	}
+	
 }
