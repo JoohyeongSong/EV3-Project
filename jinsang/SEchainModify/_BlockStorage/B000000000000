@@ -1,0 +1,9 @@
+{
+    "block_hash": "e6fe6aa51f689cc164885a688160f5fc031b6cd7b255c08e074615013910f8e8", 
+    "block_id": "B000000000000", 
+    "merkle_root": "937ba9042411aae82e555f494619e745a061d3b095ef407367156b5ea6ab69cf", 
+    "nonce": 20170101, 
+    "prev_block_hash": "58aa47367ca9cf3ce49133807ec048244ebf9d0d36ecdda5ea933ab31edf74e1", 
+    "timestamp": "0000-00-00-00-00-00", 
+    "type": "B"
+}
