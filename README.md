@@ -1,4 +1,4 @@
-1. Turn on EV3 and smartphone application.
+1. Turn the EV3 on and smartphone application.
 
 2. Run EV3_mazeSolve.java on EV3.
 
